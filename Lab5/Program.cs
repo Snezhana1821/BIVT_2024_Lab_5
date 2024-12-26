@@ -661,37 +661,29 @@ public class Program
     public void Task_2_20(ref int[,] A, ref int[,] B)
     {
         // code here
-        for (int j =0;j<A.GetLength(1);j++)
-        {
-            int k =0;
-            for (int i =0;i<A.GetLength(0);i++)
-            {
-                if (A[i,j] == 0) k++;
-            }
-            if (k ==0)
-            {
-                A = RemoveColumn(A,j);
-                j--;
-            }
-        }
-        for (int j =0;j<B.GetLength(1);j++)
-        {
-            int k =0;
-            for (int i =0;i<B.GetLength(0);i++)
-            {
-                if (B[i,j] == 0) k++;
-            }
-            if (k ==0)
-            {
-                B = RemoveColumn(B,j);
-                j--;
-            }
-        }
+        A = DeleteColumnsOut0(A);
+        B = DeleteColumnsOut0(B);
         // use RemoveColumn(matrix, columnIndex); from 2_10
 
         // end
     }
-
+    int[,] DeleteColumnsOut0(int[,] matr)
+    {
+        for (int j =0;j<matr.GetLength(1);j++)
+        {
+            int k =0;
+            for (int i =0;i<matr.GetLength(0);i++)
+            {
+                if (matr[i,j] == 0) k++;
+            }
+            if (k ==0)
+            {
+                matr = RemoveColumn(matr,j);
+                j--;
+            }
+        }
+        return matr;
+    }
     public void Task_2_21(int[,] A, int[,] B, out int[] answerA, out int[] answerB)
     {
         answerA = null;
