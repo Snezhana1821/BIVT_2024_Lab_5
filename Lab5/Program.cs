@@ -915,56 +915,39 @@ public class Program
 
         // use FindSequence(array, A, B); from Task_2_28a or entirely Task_2_28a
         // A and B - start and end indexes of elements from array for search
-        int k = 0;
-        for (int i = 0; i < first.Length; i++)
-        {
-            for (int j = i + 1; j < first.Length; j++)
-            {
-                int seq = FindSequence(first, i, j);
-                if (seq != 0) k++;
-            }
-        }
-        answerFirst = new int[k, 2];
-        k = 0;
-        for (int i = 0; i < first.Length; i++)
-        {
-            for (int j = i + 1; j < first.Length; j++)
-            {
-                int seq = FindSequence(first, i, j);
-                if (seq != 0)
-                {
-                    answerFirst[k, 0] = i;
-                    answerFirst[k, 1] = j;
-                    k++;
-                }
-            }
-        }
+        answerFirst = Monointer(first, 0, first.Length - 1);
+        answerSecond = Monointer(second, 0, second.Length - 1);
 
-        k = 0;
-        for (int i = 0; i < second.Length; i++)
+        // end
+    }
+    int[,]  Monointer(int[] arr, int A, int B)
+    {
+        int k = 0;
+        for (int i = A; i < B; i++)
         {
-            for (int j = i + 1; j < second.Length; j++)
+            for (int j = i + 1; j <= B; j++)
             {
-                int seq = FindSequence(second, i, j);
-                if (seq != 0) k++;
-            }
-        }
-        answerSecond = new int[k, 2];
-        k = 0;
-        for (int i = 0; i < second.Length; i++)
-        {
-            for (int j = i + 1; j < second.Length; j++)
-            {
-                int seq = FindSequence(second, i, j);
-                if (seq != 0)
+                if (FindSequence(arr, i, j) != 0)
                 {
-                    answerSecond[k, 0] = i;
-                    answerSecond[k, 1] = j;
                     k++;
                 }
             }
         }
-        // end
+        int[,] matr = new int[k, 2]; 
+        int ind = 0;
+        for (int i = A; i < B; i++)
+        {
+            for (int j = i + 1; j <= B; j++)
+            {
+                if (FindSequence(arr, i, j) != 0)
+                {
+                    matr[ind, 0] = i;
+                    matr[ind, 1] = j;
+                    ind++;
+                }
+            }
+        }
+        return matr;
     }
 
     public void Task_2_28c(int[] first, int[] second, ref int[] answerFirst, ref int[] answerSecond)
@@ -973,39 +956,29 @@ public class Program
 
         // use FindSequence(array, A, B); from Task_2_28a or entirely Task_2_28a or Task_2_28b
         // A and B - start and end indexes of elements from array for search
-        int s = 0, f = 0;
-        for (int i = 0; i < first.Length; i++)
-        {
-            for (int j = i + 1; j < first.Length; j++)
-            {
-                int seq = FindSequence(first, i, j);
-                if (seq != 0 && f - s < j - i)
-                {
-                    s = i;
-                    f = j;
-                }
-            }
-        }
-        answerFirst = new int[] { s, f };
+        int[,] fd = Monointer(first, 0, first.Length - 1);
+        answerFirst = MaxSeq(fd);
+        int[,] sd = Monointer(second, 0, second.Length - 1);
+        answerSecond = MaxSeq(sd);
 
-        s = 0; f = 0;
-        for (int i = 0; i < second.Length; i++)
-        {
-            for (int j = i + 1; j < second.Length; j++)
-            {
-                int seq = FindSequence(second, i, j);
-                if (seq != 0 && f - s < j - i)
-                {
-                    s = i;
-                    f = j;
-                }
-            }
-        }
-        answerSecond = new int[] { s, f };
-        // end
-    }
+    }    
     #endregion
-
+    int[] MaxSeq(int[,] matrix)
+    {
+        int k = 0;
+        int[] interval = new int[2];
+        int mx = matrix[0, 1] - matrix[0, 0];
+        for(int i = 0; i < matrix.GetLength(0); i++)
+        {
+             if(matrix[i, 1] - matrix[i, 0] > mx)
+            {
+                mx = matrix[i, 1] - matrix[i, 0];
+                interval[0] = matrix[i, 0];
+                interval[1] = matrix[i, 1];
+            }
+        }
+        return interval;
+    }
     #region Level 3
     public void Task_3_1(ref double[,] firstSumAndY, ref double[,] secondSumAndY)
     {
